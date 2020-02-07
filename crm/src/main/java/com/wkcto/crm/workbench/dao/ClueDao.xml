@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.wkcto.crm.workbench.dao.ClueDao">
+    <delete id="delClueById">
+        delete from tbl_clue where id=#{id}
+    </delete>
+    <select id="findActivityByName" resultType="Activity">
+        select
+        a.id,
+        a.name,
+        a.startDate,
+        a.endDate,
+        u.name as owner
+        from
+        tbl_activity as a join tbl_user as u
+        on u.id=a.owner
+        where
+       a.name like '%' #{name} '%'
+    </select>
+    <delete id="delRelationByIdu">
+        delete from tbl_clue_activity_relation
+        where id=#{id}
+    </delete>
+
+    <select id="showDetail" resultType="Clue">
+        select
+        c.id,
+        c.fullname,
+        c.appellation,
+        c.company,
+        c.phone,
+        c.mphone,
+        c.source,
+        u.`name` as owner,
+        c.state,
+        c.createTime,
+        c.job,
+        c.email,
+        c.website,
+        c.editTime,
+        c.editBy,
+        c.contactSummary,
+        c.nextContactTime,
+        c.address
+        from
+        tbl_clue as c join tbl_user as u
+        on c.`owner`=u.id
+        where c.id=#{id}
+    </select>
+
+    <insert id="saveClue">
+
+        insert into tbl_clue(
+
+            id,
+            fullname,
+            appellation,
+            owner,
+            company,
+            job,
+            email,
+            phone,
+            website,
+            mphone,
+            state,
+            source,
+            createBy,
+            createTime,
+            description,
+            contactSummary,
+            nextContactTime,
+            address
+
+
+        )
+
+        values(
+
+            #{id},
+            #{fullname},
+            #{appellation},
+            #{owner},
+            #{company},
+            #{job},
+            #{email},
+            #{phone},
+            #{website},
+            #{mphone},
+            #{state},
+            #{source},
+            #{createBy},
+            #{createTime},
+            #{description},
+            #{contactSummary},
+            #{nextContactTime},
+            #{address}
+
+
+        )
+
+    </insert>
+    <select id="listPage" resultType="Clue">
+        select
+        c.id,
+        c.fullname,
+        c.appellation,
+        c.company,
+        c.phone,
+        c.mphone,
+        c.source,
+        u.`name` as owner,
+        c.state,
+        c.createTime
+        from
+        tbl_clue as c join tbl_user as u
+        on c.`owner`=u.id
+        <where>
+            <if test="fullname!=null and fullname!=''">
+                and c.fullname like '%' #{fullname} '%'
+            </if>
+            <if test="appellation!=null and appellation!=''">
+                and c.appellation like '%' #{appellation} '%'
+            </if>
+            <if test="company!=null and company!=''">
+                and c.company like '%' #{company} '%'
+            </if>
+            <if test="phone!=null and phone!=''">
+                and c.phone like '%' #{phone} '%'
+            </if>
+            <if test="mphone!=null and mphone!=''">
+                and c.mphonelike '%' #{mphone} '%'
+            </if>
+            <if test="source!=null and source!=''">
+                and c.source=#{source}
+            </if>
+            <if test="state!=null and state!=''">
+                and c.state=#{state}
+            </if>
+            <if test="owner!=null and owner!=''">
+                and u.name like '%' #{owner} '%'
+            </if>
+        </where>
+        order by c.createTime
+        LIMIT  #{skipCount},#{pageSize}
+    </select>
+    <select id="tatol" resultType="int">
+        select
+       count(*)
+        from
+        tbl_clue as c join tbl_user as u
+        on c.`owner`=u.id
+        <where>
+            <if test="fullname!=null and fullname!=''">
+                and c.fullname like '%' #{fullname} '%'
+            </if>
+            <if test="appellation!=null and appellation!=''">
+                and c.appellation like '%' #{appellation} '%'
+            </if>
+            <if test="company!=null and company!=''">
+                and c.company like '%' #{company} '%'
+            </if>
+            <if test="phone!=null and phone!=''">
+                and c.phone like '%' #{phone} '%'
+            </if>
+            <if test="mphone!=null and mphone!=''">
+                and c.mphonelike '%' #{mphone} '%'
+            </if>
+            <if test="source!=null and source!=''">
+                and c.source=#{source}
+            </if>
+            <if test="state!=null and state!=''">
+                and c.state=#{state}
+            </if>
+            <if test="owner!=null and owner!=''">
+                and u.name like '%' #{owner} '%'
+            </if>
+        </where>
+    </select>
+    <delete id="delClue" >
+        delete from  tbl_clue where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="findClueById" resultType="Clue">
+        select *from tbl_clue where id=#{id}
+    </select>
+    <update id="updateClue">
+     update tbl_clue set
+            fullname=#{fullname},
+            appellation=#{appellation},
+            owner=#{owner},
+            company=#{company},
+            job=#{job},
+            email=#{email},
+            phone=#{phone},
+            website=#{website},
+            mphone=#{mphone},
+            state=#{state},
+            source=#{source},
+            createBy=#{createBy},
+            createTime=#{createTime},
+            description=#{description},
+            editBy=#{editBy},
+            editTime=#{editTime},
+            contactSummary=#{contactSummary},
+            nextContactTime=#{nextContactTime},
+            address=#{address}
+            where id=#{id}
+
+    </update>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
